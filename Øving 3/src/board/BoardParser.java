@@ -10,7 +10,7 @@ public class BoardParser {
         for (int x = 0; x < board[0].length(); x++) {
             for (int y = 0; y < board.length; y++) {
                 char c = board[y].charAt(x);
-                nodes[x][y] = new Node(x, y, c == '#' ? true : false);
+                nodes[x][y] = new Node(x, y, c == '#' ? 0 : 1, c);
                 if (c == 'A')
                     start = nodes[x][y];
                 else if (c == 'B')
@@ -23,28 +23,27 @@ public class BoardParser {
     public static Board parseAdvanced(String[] board) {
         Node[][] nodes = new Node[board[0].length()][board.length];
         Node start = null, end = null;
-        System.out.println(nodes.length + " " + nodes[0].length);
         for (int x = 0; x < board[0].length(); x++) {
             for (int y = 0; y < board.length; y++) {
                 char c = board[y].charAt(x);
                 switch (c) {
                     case 'w':
-                        nodes[x][y] = new Node(x, y, 100);
+                        nodes[x][y] = new Node(x, y, 100, c);
                         break;
                     case 'm':
-                        nodes[x][y] = new Node(x, y, 50);
+                        nodes[x][y] = new Node(x, y, 50, c);
                         break;
                     case 'f':
-                        nodes[x][y] = new Node(x, y, 10);
+                        nodes[x][y] = new Node(x, y, 10, c);
                         break;
                     case 'g':
-                        nodes[x][y] = new Node(x, y, 5);
+                        nodes[x][y] = new Node(x, y, 5, c);
                         break;
                     case 'r':
-                        nodes[x][y] = new Node(x, y, 1);
+                        nodes[x][y] = new Node(x, y, 1, c);
                         break;
                     default:
-                        nodes[x][y] = new Node(x, y, 0);
+                        nodes[x][y] = new Node(x, y, 1, c);
                         break;
                 }
                 if (c == 'A')

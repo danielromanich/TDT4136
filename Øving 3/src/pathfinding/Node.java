@@ -7,36 +7,33 @@ import java.util.HashMap;
 public class Node {
 
     private int x, y, weight;
-    private float g, h;
-    private boolean blocking, fancy;
+    private double g, h;
+    private char type;
+    private Node prevNode;
+    private boolean blocking;
     public static int NODE_WIDTH = 40, NODE_HEIGHT = 40;
     private ArrayList<Node> neighbours = new ArrayList<>();
 
-    public static final HashMap<Integer, Color> COLOR_MAP = new HashMap<>();
+    public static final HashMap<Character, Color> COLOR_MAP = new HashMap<>();
 
     static {
-        COLOR_MAP.put(100, new Color(77, 77, 255));
-        COLOR_MAP.put(50, new Color(166, 166, 166));
-        COLOR_MAP.put(10, new Color(0, 128, 0));
-        COLOR_MAP.put(5, new Color(128, 255, 128));
-        COLOR_MAP.put(1, new Color(191, 128, 64));
+        COLOR_MAP.put('w', new Color(77, 77, 255));
+        COLOR_MAP.put('m', new Color(166, 166, 166));
+        COLOR_MAP.put('f', new Color(0, 128, 0));
+        COLOR_MAP.put('g', new Color(128, 255, 128));
+        COLOR_MAP.put('r', new Color(191, 128, 64));
+        COLOR_MAP.put('#', new Color(0, 0, 0));
+        COLOR_MAP.put('.', new Color(255, 255, 255));
     }
 
-    public Node(int x, int y, boolean blocking) {
+    public Node(int x, int y, int weight, char type) {
         this.x = x;
         this.y = y;
         this.g = Float.MAX_VALUE;
-        this.blocking = blocking;
-        this.weight = 1;
-    }
-
-    public Node(int x, int y, int weight) {
-        this.x = x;
-        this.y = y;
-        this.g = Float.MAX_VALUE;
-        this.blocking = false;
         this.weight = weight;
-        this.fancy = true;
+        this.type = type;
+        if (this.weight == 0)
+            this.blocking = true;
     }
 
     @Override
@@ -53,8 +50,8 @@ public class Node {
         return false;
     }
 
-    public float getDistance(Node node) {
-        return (float) Math.sqrt(Math.pow(this.getX() - node.getX(), 2) + Math.pow(this.getY() - node.getY(), 2)) + node.getWeight();
+    public float distanceTo(Node node) {
+        return (float) Math.sqrt(Math.pow(this.getX() - node.getX(), 2) + Math.pow(this.getY() - node.getY(), 2));
     }
 
     public boolean isBlocking() {
@@ -73,11 +70,15 @@ public class Node {
         return this.y;
     }
 
-    public float getCost() {
+    public Node getPrevNode() {
+        return this.prevNode;
+    }
+
+    public double getCost() {
         return this.h + this.g;
     }
 
-    public float getG() {
+    public double getG() {
         return this.g;
     }
 
@@ -85,17 +86,15 @@ public class Node {
         return this.neighbours.toArray(new Node[this.neighbours.size()]);
     }
 
-    private Color getColor() {
-        if (this.fancy)
-            return COLOR_MAP.get(this.getWeight());
-        return this.isBlocking() ? new Color(0, 0, 0) : new Color(255, 255, 255);
+    public void setPrevNode(Node n) {
+        this.prevNode = n;
     }
 
-    public void setH(float h) {
+    public void setH(double h) {
         this.h = h;
     }
 
-    public void setG(float g) {
+    public void setG(double g) {
         this.g = g;
     }
 
@@ -104,7 +103,7 @@ public class Node {
     }
 
     public void draw(Graphics g, int x, int y) {
-        g.setColor(this.getColor());
+        g.setColor(COLOR_MAP.get(this.type));
         g.fillRect(x, y, NODE_WIDTH, NODE_HEIGHT);
         g.setColor(Color.BLACK);
         g.drawRect(x, y, NODE_WIDTH, NODE_HEIGHT);
