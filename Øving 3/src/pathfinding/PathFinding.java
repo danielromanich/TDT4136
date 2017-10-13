@@ -38,18 +38,18 @@ public class PathFinding {
     public static final PathRunnable[] PATH_RUNNABLES = {ASTAR, DIJKSTRA, BFS};
 
     public static Path aStar(Node start, Node end) {
-        return heapPathFinder(new PriorityQueue<>(ASTAR_COMPARATOR), start, end);
+        return genericPathFinder(new PriorityQueue<>(ASTAR_COMPARATOR), start, end);
     }
 
     public static Path dijkstra(Node start, Node end) {
-        return heapPathFinder(new PriorityQueue<>(DIJKSTRA_COMPARATOR), start, end);
+        return genericPathFinder(new PriorityQueue<>(DIJKSTRA_COMPARATOR), start, end);
     }
 
     public static Path bfs(Node start, Node end) {
-        return heapPathFinder(new LinkedList<>(), start, end);
+        return genericPathFinder(new LinkedList<>(), start, end);
     }
 
-    private static Path heapPathFinder(Queue<Node> open, Node start, Node end) {
+    private static Path genericPathFinder(Queue<Node> open, Node start, Node end) {
         ArrayList<Node> closed = new ArrayList<>(); //The closed set
         start.setG(0); //Initializing start node with G=0
         open.add(start);
