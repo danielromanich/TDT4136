@@ -60,7 +60,7 @@ public class DrawPane extends JPanel {
             g.drawString("X", n.getX() * Node.NODE_WIDTH + Node.NODE_WIDTH / 2 - 10, n.getY() * Node.NODE_HEIGHT + Node.NODE_HEIGHT / 2 + 13);
         }
         for (Node n : this.open) {
-            g.drawString("*", n.getX() * Node.NODE_WIDTH + Node.NODE_WIDTH / 2 - 5, n.getY() * Node.NODE_HEIGHT + Node.NODE_HEIGHT / 2 + 20);
+            g.drawString("O", n.getX() * Node.NODE_WIDTH + Node.NODE_WIDTH / 2 - 10, n.getY() * Node.NODE_HEIGHT + Node.NODE_HEIGHT / 2 + 10);
         }
     }
 
@@ -81,24 +81,11 @@ public class DrawPane extends JPanel {
                     }
                     this.repaint();
                 }
-                saveImage();
                 Stream.of(path.getOpenNodes()).forEach(open::add);
                 Stream.of(path.getClosedNodes()).forEach(closed::add);
                 running = false;
                 this.repaint();
             }).start();
-        }
-    }
-
-    private final void saveImage() {
-        try {
-            BufferedImage image = new BufferedImage(getBoardWidth(), getBoardHeight(), BufferedImage.TYPE_INT_RGB);
-            Graphics2D graphics2D = image.createGraphics();
-            this.paint(graphics2D);
-            ImageIO.write(image,"jpeg", new File("./data/" + this.name.substring(0, this.name.length() - 4) + ".jpg"));
-        }
-        catch(IOException e)  {
-            e.printStackTrace();
         }
     }
 
