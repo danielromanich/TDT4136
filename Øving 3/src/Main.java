@@ -8,7 +8,8 @@ import ui.BoardUI;
 
 public class Main {
 
-    private static boolean useUI = true;
+    //Set true to visualize it with a UI, false to generate images
+    private static boolean useUI = false;
 
     public static void main(String... args) {
         if (useUI)

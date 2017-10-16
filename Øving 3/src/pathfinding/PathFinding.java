@@ -37,14 +37,17 @@ public class PathFinding {
 
     public static final PathRunnable[] PATH_RUNNABLES = {ASTAR, DIJKSTRA, BFS};
 
+    //Finds the shortest path with aStar
     public static Path aStar(Node start, Node end) {
         return genericPathFinder(new PriorityQueue<>(ASTAR_COMPARATOR), start, end);
     }
 
+    //Finds the shortest path with dijkstra
     public static Path dijkstra(Node start, Node end) {
         return genericPathFinder(new PriorityQueue<>(DIJKSTRA_COMPARATOR), start, end);
     }
 
+    //Finds the "shortest" path with bfs
     public static Path bfs(Node start, Node end) {
         return genericPathFinder(new LinkedList<>(), start, end);
     }
@@ -73,10 +76,12 @@ public class PathFinding {
             }
         }
         List<Node> path = reconstruct(end);
+        //Find the closed nodes that are not in the path
         List<Node> closedSet = closed.stream().filter((node) -> !path.contains(node)).collect(Collectors.toList());
         return new Path(path.toArray(new Node[path.size()]), open.toArray(new Node[open.size()]), closedSet.toArray(new Node[closedSet.size()]));
     }
 
+    //Reconstructs the path by following the trail back to start
     private static ArrayList<Node> reconstruct(Node end) {
         ArrayList<Node> path = new ArrayList<>();
         Node current = end;
@@ -87,11 +92,13 @@ public class PathFinding {
         return path;
     }
 
+    //Comparator comparing the total cost of a node (its g + h)
     private static final Comparator<Node> ASTAR_COMPARATOR = (n1, n2) -> {
         double diff = n1.getCost() - n2.getCost();
         return diff < 0 ? -1 : diff == 0 ? 0 : 1;
     };
 
+    //Comparator comparing the g cost of a node
     private static final Comparator<Node> DIJKSTRA_COMPARATOR = (n1, n2) -> {
         double diff = n1.getG() - n2.getG();
         return diff < 0 ? -1 : diff == 0 ? 0 : 1;

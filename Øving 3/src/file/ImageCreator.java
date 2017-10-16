@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 
 public class ImageCreator {
 
+    //Saves the image for the given solution
     public static final void saveImage(String name, Path path, Node[][] nodes) {
         try {
             BufferedImage image = new BufferedImage(nodes.length * Node.NODE_WIDTH, nodes[0].length * Node.NODE_HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -27,6 +28,7 @@ public class ImageCreator {
         }
     }
 
+    //Draws the path onto the image
     private static void draw(Node[][] nodes, Path path, Graphics g) {
         Node start = path.getPath()[0], end = path.getPath()[path.getPath().length - 1];
         for (int x = 0; x < nodes.length; x++) {
@@ -54,7 +56,7 @@ public class ImageCreator {
             g.drawString("X", n.getX() * Node.NODE_WIDTH + Node.NODE_WIDTH / 2 - 10, n.getY() * Node.NODE_HEIGHT + Node.NODE_HEIGHT / 2 + 13);
         }
         for (Node n : path.getOpenNodes()) {
-            g.drawString("*", n.getX() * Node.NODE_WIDTH + Node.NODE_WIDTH / 2 - 5, n.getY() * Node.NODE_HEIGHT + Node.NODE_HEIGHT / 2 + 20);
+            g.drawString("O", n.getX() * Node.NODE_WIDTH + Node.NODE_WIDTH / 2 - 10, n.getY() * Node.NODE_HEIGHT + Node.NODE_HEIGHT / 2 + 10);
         }
     }
 }
