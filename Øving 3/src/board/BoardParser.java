@@ -4,6 +4,7 @@ import pathfinding.Node;
 
 public class BoardParser {
 
+    //Parses boards 1-4 into a new board
     public static Board parseSimple(String[] board) {
         Node[][] nodes = new Node[board[0].length()][board.length];
         Node start = null, end = null;
@@ -20,6 +21,7 @@ public class BoardParser {
         return new Board(start, end, nodes);
     }
 
+    //Parses board 5-8 into a new board
     public static Board parseAdvanced(String[] board) {
         Node[][] nodes = new Node[board[0].length()][board.length];
         Node start = null, end = null;

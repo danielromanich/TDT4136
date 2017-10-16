@@ -20,6 +20,7 @@ public class Board {
         this.init();
     }
 
+    //Iniatializes the board by adding every neighbour of every node
     private void init() {
         for (int x = 0; x < this.board.length; x++) {
             for (int y = 0; y < this.board[x].length; y++) {
@@ -29,6 +30,7 @@ public class Board {
         }
     }
 
+    //Returns the neighbourlist of the given node
     private ArrayList<Node> getNeighbours(Node node) {
         ArrayList<Node> neighbours = new ArrayList<>();
         for (int x = -1; x < 2; x++) {
@@ -52,6 +54,7 @@ public class Board {
         return this.path;
     }
 
+    //A function that generates the path for the given board (This is used in the UI)
     public void generatePath() {
         this.path = this.pathRunnable.generatePath(this.start, this.end);
     }

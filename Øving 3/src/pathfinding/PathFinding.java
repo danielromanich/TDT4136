@@ -55,7 +55,7 @@ public class PathFinding {
         open.add(start);
         while (!open.isEmpty()) {
             Node current = open.poll(); //Fetching the element in the open set with lowest f
-            if (current.equals(end) && open instanceof PriorityQueue)
+            if (current.equals(end))
                 break;
             closed.add(current); //Adding the element to the closed list
             for (Node n : current.getNeighbours()) { //For all the current nodes neighbours
