@@ -115,86 +115,84 @@ class MinimaxAgent(MultiAgentSearchAgent):
     """
 
     def getAction(self, game_state):
-        return self.minimax(game_state, self.depth, True)
-        #util.raiseNotDefined()
+        return self.max_play(game_state, 0)
 
-    def minimax(self, game_state, depth, maximize):
-        if depth == 0 or game_state.isWin() or game_state.isLose():
-            return self.evaluationFunction
-        
+    # This function is our max function as well as our best action picker
+    def max_play(self, game_state, depth):
+        if game_state.isWin() or game_state.isLose():
+            return game_state.getScore()
+        best_score = float("-inf")
+        best_action = game_state.getLegalActions(0)[0]
+        for action in game_state.getLegalActions(0):
+            new_state = game_state.generateSuccessor(0, action)
+            current_score = self.min_play(new_state, depth, 1)
+            if current_score > best_score:
+                best_score = current_score
+                best_action = action
+        return best_action if depth == 0 else best_score
 
-
-"""
-    def getAction(self, gameState):
-        state = gameState
-        best_move = state.getLegalActions(0)
-        best_score = float('-inf')
-        for x in range(0, self.depth):
-            for move in state.getLegalActions(0):
-                state = state.generateSuccessor(0, move)
-                for i in range(1, state.getNumAgents()):
-                    score = self.min_play(state, i)
-                    if score > best_score:
-                        best_move = move
-                        best_score = score
-        return best_move
-
-          Returns the minimax action from the current gameState using self.depth
-          and self.evaluationFunction.
-
-          Here are some method calls that might be useful when implementing minimax.
-
-          gameState.getLegalActions(agentIndex):
-            Returns a list of legal actions for an agent
-            agentIndex=0 means Pacman, ghosts are >= 1
-
-          gameState.generateSuccessor(agentIndex, action):
-            Returns the successor game state after an agent takes an action
-
-          gameState.getNumAgents():
-            Returns the total number of agents in the game
-        """
-
-"""
-    def min_play(self, gameState, agent_id):
-        if gameState.isLose() or gameState.isWin():
-            return self.evaluationFunction
-        moves = gameState.getLegalActions(agent_id)
-        best_score = float('inf')
-        for move in moves:
-            state = gameState.generateSuccessor(agent_id, move)
-            score = self.max_play(state, agent_id)
+    def min_play(self, game_state, depth, current_agent):
+        if game_state.isWin() or game_state.isLose():
+            return game_state.getScore()
+        next_agent = (current_agent + 1) % game_state.getNumAgents()
+        best_score = float("inf")
+        for action in game_state.getLegalActions(current_agent):
+            new_state = game_state.generateSuccessor(current_agent, action)
+            if next_agent == 0:
+                if depth == self.depth - 1:
+                    score = self.evaluationFunction(new_state)
+                else:
+                    score = self.max_play(new_state, depth + 1)
+            else:
+                score = self.min_play(new_state, depth, next_agent)
             if score < best_score:
-                best_move = move
-                score = best_score
-            return best_score
-        pass
-
-    def max_play(self, gameState, agent_id):
-        if gameState.isLose() or gameState.isWin():
-            return self.evaluationFunction
-        moves = gameState.generateSuccessor(agent_id)
-        best_score = float('-inf')
-        for move in moves:
-            state = gameState.generateSuccessor(agent_id, move)
-            score = self.min_play(state, agent_id)
-            if score > best_score:
-                best_move = move
                 best_score = score
         return best_score
-"""
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
       Your minimax agent with alpha-beta pruning (question 3)
     """
 
-    def getAction(self, gameState):
-        """
-          Returns the minimax action using self.depth and self.evaluationFunction
-        """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+    def getAction(self, game_state):
+        return self.max_play(game_state, 0, float("-inf"), float("inf"))
+
+    def max_play(self, game_state, depth, a, b):
+        if game_state.isWin() or game_state.isLose():
+            return game_state.getScore()
+        best_score = float("-inf")
+        best_action = game_state.getLegalActions(0)[0]
+        for action in game_state.getLegalActions(0):
+            new_state = game_state.generateSuccessor(0, action)
+            current_score = self.min_play(new_state, depth, 1, a, b)
+            if current_score > best_score:
+                best_score = current_score
+                best_action = action
+            a = max(a, best_score)
+            if best_score > b:
+                return best_score
+        return best_action if depth == 0 else best_score
+
+    def min_play(self, game_state, depth, current_agent, a, b):
+        if game_state.isWin() or game_state.isLose():
+            return game_state.getScore()
+        next_agent = (current_agent + 1) % game_state.getNumAgents()
+        best_score = float("inf")
+        for action in game_state.getLegalActions(current_agent):
+            new_state = game_state.generateSuccessor(current_agent, action)
+            if next_agent == 0:
+                if depth == self.depth - 1:
+                    score = self.evaluationFunction(new_state)
+                else:
+                    score = self.max_play(new_state, depth + 1, a, b)
+            else:
+                score = self.min_play(new_state, depth, next_agent, a, b)
+            if score < best_score:
+                best_score = score
+            b = min(b, best_score)
+            if best_score < a:
+                return best_score
+        return best_score
 
 
 class ExpectimaxAgent(MultiAgentSearchAgent):
